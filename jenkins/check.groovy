@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        GITHUB_TOKEN = credentials('github-token')  // stored in Jenkins Credentials
+        GITHUB_TOKEN = credentials('github')  // stored in Jenkins Credentials
         PYTHONUNBUFFERED = 1
     }
 
