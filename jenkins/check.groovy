@@ -11,12 +11,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
         stage('Build') {
             when {
                 changeRequest(target: 'main') // Triggers only on PRs to main
