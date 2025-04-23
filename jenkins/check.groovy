@@ -1,58 +1,40 @@
 pipeline {
     agent any
 
-    environment {
-        GITHUB_TOKEN = credentials('github')  // stored in Jenkins Credentials
-        PYTHONUNBUFFERED = 1
+    triggers {
+        // Optional if you want periodic checks. Otherwise rely on GitHub webhook
+        // pollSCM('H/5 * * * *')
+    }
+
+    options {
+        skipDefaultCheckout true
     }
 
     stages {
-        stage('Validate PR') {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build') {
             when {
-                expression {
-                    def isPR = env.CHANGE_ID != null
-                    def hasTestTag = env.CHANGE_TITLE?.toLowerCase().contains('test') || env.CHANGE_DESCRIPTION?.toLowerCase().contains('test')
-                    return isPR && hasTestTag
-                }
+                changeRequest(target: 'main') // Triggers only on PRs to main
             }
             steps {
-                echo "This PR has 'test' tag. Proceeding with test pipeline."
+                echo "Building Pull Request to main branch..."
+                // Add build steps here
             }
         }
 
-        stage('Run Pytest') {
-            echo "Running pytest"
-        }
-
-        stage('Auto Merge PR') {
+        stage('Test') {
             when {
-                expression { return env.CHANGE_ID != null }
+                changeRequest(target: 'main')
             }
             steps {
-                script {
-                    def repo = env.CHANGE_URL.split('.com/')[1].replace('.git', '')
-                    def prNumber = env.CHANGE_ID
-                    echo "${repo}"
-                    echo "${prNumber}"
-
-                    def apiUrl = "https://api.github.com/repos/${repo}/pulls/${prNumber}/merge"
-
-                    echo "Attempting to auto-merge PR #${prNumber}..."
-
-                    sh """
-                    curl -s -X PUT -H "Authorization: token ${GITHUB_TOKEN}" \
-                        -H "Accept: application/vnd.github+json" \
-                        ${apiUrl} \
-                        -d '{"commit_title": "Auto-merge after test success", "merge_method": "merge"}'
-                    """
-                }
+                echo "Running tests on PR to main..."
+                // Add test steps here
             }
-        }
-    }
-
-    post {
-        failure {
-            echo "Tests failed. PR will not be merged."
         }
     }
 }
