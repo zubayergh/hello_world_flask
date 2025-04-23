@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        GITHUB_TOKEN = credentials('github-token')  // stored in Jenkins Credentials
+        GITHUB_TOKEN = credentials('github')  // stored in Jenkins Credentials
         PYTHONUNBUFFERED = 1
     }
 
@@ -32,6 +32,9 @@ pipeline {
                 script {
                     def repo = env.CHANGE_URL.split('.com/')[1].replace('.git', '')
                     def prNumber = env.CHANGE_ID
+                    echo "${repo}"
+                    echo "${prNumber}"
+
                     def apiUrl = "https://api.github.com/repos/${repo}/pulls/${prNumber}/merge"
 
                     echo "Attempting to auto-merge PR #${prNumber}..."
