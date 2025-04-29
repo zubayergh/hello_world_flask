@@ -1,15 +1,6 @@
 pipeline {
     agent any
 
-    triggers {
-        // Optional if you want periodic checks. Otherwise rely on GitHub webhook
-        // pollSCM('H/5 * * * *')
-    }
-
-    options {
-        skipDefaultCheckout true
-    }
-
     stages {
         stage('Build') {
             when {
