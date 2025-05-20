@@ -4,7 +4,7 @@ pipeline {
     environment {
         REPO_URL = 'https://github.com/zubayergh/hello_world_flask'
         BRANCH = 'main'
-        PROJECT_DIR = 'C:\\my-app'  // Adjust as needed
+        PROJECT_DIR = '/opt/your-app'  // Adjust as needed
     }
 
     stages {
@@ -44,7 +44,6 @@ pipeline {
                     sh """
                     echo "🐳 Rebuilding Docker containers..."
                     docker compose down
-                    docker compose build --no-cache
                     docker compose up -d
                     """
                 }
