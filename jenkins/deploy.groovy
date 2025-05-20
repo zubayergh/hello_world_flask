@@ -4,7 +4,7 @@ pipeline {
     environment {
         REPO_URL = 'https://github.com/zubayergh/hello_world_flask'
         BRANCH = 'main'
-        PROJECT_DIR = '/opt/your-app'  // Adjust as needed
+        PROJECT_DIR = '${env.WORKSPACE}/your-app'  // Adjust as needed
     }
 
     stages {
