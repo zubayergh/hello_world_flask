@@ -53,41 +53,55 @@
 // }
 
 pipeline {
-    agent {
-        docker {
-            image 'python:3.11'
-        }
+    agent any
+
+    environment {
+        APP_DIR = 'hello_world_flask'
     }
 
     stages {
-        stage('Clone Repo') {
+        stage('Checkout') {
             steps {
-                checkout scm
+                git url: 'https://github.com/zubayergh/hello_world_flask', branch: 'main'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                sh 'pip install -r requirements.txt'
+                sh '''
+                    python3 --version
+                    pip install -r requirements.txt
+                '''
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'pytest'
+                sh '''
+                    echo "Running dummy test with pytest..."
+                    pytest tests
+                '''
             }
         }
 
-        stage('Build Image') {
+        // Optional: Run Flask App with Docker
+        /*
+        stage('Build & Run with Docker') {
             steps {
-                sh 'docker build -t my-flask-app .'
+                sh '''
+                    docker build -t flask-app .
+                    docker run -d -p 5050:5000 --name flask_app flask-app
+                '''
             }
         }
+        */
+    }
 
-        stage('Deploy') {
-            steps {
-                sh 'docker compose down && docker compose up -d'
-            }
+    post {
+        always {
+            echo 'Cleaning up...'
+            // Uncomment if using Docker
+            // sh 'docker stop flask_app || true && docker rm flask_app || true'
         }
     }
 }
