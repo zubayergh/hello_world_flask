@@ -36,11 +36,7 @@ pipeline {
 
         stage('Test') { 
             steps {
-                sh """
-                apt install -y python3-pip
                 echo "testing......"
-                pip install -r requirements.txt
-                """
             }
         }
 
