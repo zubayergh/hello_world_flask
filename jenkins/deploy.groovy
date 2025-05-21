@@ -4,7 +4,7 @@ pipeline {
     environment {
         REPO_URL = 'https://github.com/zubayergh/hello_world_flask'
         BRANCH = 'main'
-        PROJECT_DIR = "${env.WORKSPACE}/your-app"  // Adjust as needed
+        PROJECT_DIR = "${env.WORKSPACE}/hello_world_flask"  // Adjust as needed
     }
 
     stages {
@@ -20,7 +20,8 @@ pipeline {
                         git reset --hard origin/${env.BRANCH}
                     else
                         echo "📥 Cloning repository..."
-                        git clone -b ${env.BRANCH} ${env.REPO_URL} ${env.PROJECT_DIR}
+                        git clone https://github.com/zubayergh/hello_world_flask
+                        cd hello_world_flask
                     fi
                     """
                 }
