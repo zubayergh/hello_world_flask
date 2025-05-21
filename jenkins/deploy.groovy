@@ -8,17 +8,6 @@ pipeline {
     }
 
     stages {
-        stage('Build') { 
-            steps {
-                echo "Building......"
-            }
-        }
-
-        stage('Test') { 
-            steps {
-                echo "testing......"
-            }
-        }
 
         stage('Checkout Code') {
             steps {
@@ -35,6 +24,18 @@ pipeline {
                     fi
                     """
                 }
+            }
+        }
+
+        stage('Build') { 
+            steps {
+                echo "Building......"
+            }
+        }
+
+        stage('Test') { 
+            steps {
+                echo "testing......"
             }
         }
 
