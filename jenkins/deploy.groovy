@@ -36,7 +36,10 @@ pipeline {
 
         stage('Test') { 
             steps {
+                sh """
                 echo "testing......"
+                pip install -r requirements.txt
+                """
             }
         }
 
